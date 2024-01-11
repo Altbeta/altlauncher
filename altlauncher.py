@@ -9,13 +9,34 @@ import os
 import xml.etree.ElementTree as ET
 import webbrowser
 
-
 name = "Altlauncher"
 version = "0.0"
 release = ""
 build2 = '1'
 libraries = "client/minecraft.jar;client/jinput.jar;client/lwjgl_util.jar;client/lwjgl.jar;"
 special_chars = ['@', "'", '"', '№', '#', '$', ';', '%', '^', ':', '&', '?', '*', '(', ')', '{', '}', '[', ']', '|', '/', ',', '`', '~', '\\', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', 'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я', ' ', ' ']
+
+info_title = "Инфо"
+warning_title = "Упс!"
+error_title = "Ошибка!"
+
+err_spaceInNickname = ''
+err_specialCharactersInNickname = ''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if not os.path.exists("res"):
     os.mkdir("res")
@@ -52,10 +73,10 @@ def start():
         s.close()
         print(nickname.get(), xms, xmx, session, jrebin)
     print("print('Very useful information')")
-    if os.path.isfile('client/minecraft.jar') and os.path.isfile('client/lwjgl_util.jar') and os.path.isfile('client/lwjgl.jar') and os.path.isfile('client/jinput.jar') and os.path.isfile('client/natives/openAL64.dll') and os.path.isfile('client/natives/OpenAL32.dll') and os.path.isfile('client/natives/lwgjl64.dll') and os.path.isfile('client/natives/lwgjl.dll') and os.path.isfile('client/natives/jinput-raw_64.dll') and os.path.isfile('client/natives/jinput-raw.dll') and os.path.isfile('client/natives/jinput-dx8_64.dll') and os.path.isfile('client/natives/jinput-dx8.dll'):
+    if os.path.isfile('client/minecraft.jar') and os.path.isfile('client/lwjgl_util.jar') and os.path.isfile('client/lwjgl.jar') and os.path.isfile('client/jinput.jar') and os.path.isfile('client/natives/OpenAL64.dll') and os.path.isfile('client/natives/OpenAL32.dll') and os.path.isfile('client/natives/lwjgl64.dll') and os.path.isfile('client/natives/lwjgl.dll') and os.path.isfile('client/natives/jinput-raw_64.dll') and os.path.isfile('client/natives/jinput-raw.dll') and os.path.isfile('client/natives/jinput-dx8_64.dll') and os.path.isfile('client/natives/jinput-dx8.dll'):
         minecraftlauncher()
     else:
-        showinfo(title="Инфо", message="Отсутствует клиент! Скачиваем...")
+        showinfo(title=info_title, message="Отсутствует клиент! Скачиваем...")
         wget.download("https://atarwn.github.io/abl/client.zip")
         with zipfile.ZipFile('client.zip', 'r') as zip_c:
             zip_c.extractall('client')
@@ -73,29 +94,31 @@ def minecraftlauncher():
     ml.write('Set WshShell = CreateObject("WScript.Shell")'+'\n'+'WshShell.Run chr(34) & "minecraftlauncher.bat" & Chr(34), 0')
     ml.close()
     os.system('hmcl.vbs')
-    os.remove("minecraftlauncher.bat")
     os.remove("hmcl.vbs")
     
 def Update_Client():
     try:
         os.makedirs("client/natives", exist_ok=True)
     except OSError:
-        showerror(title="Ошибка", message="Создать директорию client не удалось")
+        showerror(title=error_title, message="Создать директорию client не удалось")
     else:
-        showinfo(title="Инфо", message="Ждите уведомления об окончании загрузки")
-        wget.download("https://atarwn.github.io/abl/client.zip")
-        with zipfile.ZipFile('client.zip', 'r') as zip_c:
-            zip_c.extractall('client')
-        os.remove("client.zip")
-        wget.download("https://atarwn.github.io/abl/resources.zip")
-        with zipfile.ZipFile('resources.zip', 'r') as zip_r:
-            zip_r.extractall('.minecraft/resources')
-        os.remove("resources.zip")
-        wget.download("https://atarwn.github.io/abl/resources_music.zip")
-        with zipfile.ZipFile('resources_music.zip', 'r') as zip_rm:
-            zip_rm.extractall('.minecraft/resources')
-        os.remove("resources_music.zip")
-        showinfo(title="Инфо", message="Загрузка завершена")
+        try:
+            showinfo(title=info_title, message="Ждите уведомления об окончании загрузки")
+            wget.download("https://atarwn.github.io/abl/client.zip")
+            with zipfile.ZipFile('client.zip', 'r') as zip_c:
+                zip_c.extractall('client')
+            os.remove("client.zip")
+            wget.download("https://atarwn.github.io/abl/resources.zip")
+            with zipfile.ZipFile('resources.zip', 'r') as zip_r:
+                zip_r.extractall('.minecraft/resources')
+            os.remove("resources.zip")
+            wget.download("https://atarwn.github.io/abl/resources_music.zip")
+            with zipfile.ZipFile('resources_music.zip', 'r') as zip_rm:
+                zip_rm.extractall('.minecraft/resources')
+            os.remove("resources_music.zip")
+            showinfo(title=info_title, message="Загрузка завершена")
+        except:
+            showerror(title=error_title, message="Отсутствует подключение к интернету...")
 
 def Install_Java():
 #    try:
@@ -122,7 +145,7 @@ def Install_Java():
 #            o.close()
 #    else:
 #        pass
-    showerror(title="Упс!", message="Данная функция пока недоступна, ждите обновления!")
+    showerror(title=warning_title, message="Данная функция пока недоступна, ждите обновления!")
 
         
 def Open_Support():
@@ -202,7 +225,7 @@ def defsettings():
             au_enabled.set(False)
     else:
         create_config_au_file()
-        check_update()
+        #check_update()
         
     autoupdatech = ttk.Checkbutton(settings, text="Включить", variable=au_enabled)
     autoupdatel = Label(settings, text="Автообновление:")
@@ -240,6 +263,7 @@ def defsettings():
 
 # Надо
 def create_settings_file():
+    os.mkdir('res/config')
     s = open("res/config/settings.txt", "w")
     s.write("512"+"\n"+"1024"+"\n"+"12345"+"\n"+r"*")
     s.close
@@ -265,13 +289,13 @@ def definfo():
     info.iconbitmap(default="res/local-resources/favicon.ico")
     
     info1 = Label(info, text="По всем вопросам на наш Discord сервер:")
-    radmin1 = Label(info, text="discord.gg/p2qATAsGMp")
+    radmin1 = Label(info, text="https://discord.gg/5x5N6a4nUX")
     # warning = Label(info, foreground="#FF0000", text="Не верьте третьим лицам выдающим себя за владельцев AltBeta!")    # возможно будет удалено
     updateclient = Button(info, text='Обновить клиент Minecraft', command=Update_Client, cursor="hand2")
     installjava = Button(info, text='Установить рекомендуемую Java', command=Install_Java, cursor="hand2")
     opensupport = Button(info, text='Открыть справку', command=Open_Support, cursor="hand2")
     ver = Label(info, text="Версия: "+version+" "+release)
-    cr = Label(info, text="\n\n© 2024 __kakao & atarwn")
+    cr = Label(info, text="\nLicense: QPL v1.0 (https://qwa.lol/license)\nCopyright © 2024 atarwn")
 
     ver.pack()
     info1.pack()
@@ -315,61 +339,51 @@ def main_code():
     root.iconbitmap(default="res/local-resources/favicon.ico")
     
     global build1
-    if os.path.exists(wget.download('https://atarwn.github.io/abl/newupdate.xml', 'temp_bmV3dXBkYXRlLnhtbA.xml')):
-        os.remove('temp_bmV3dXBkYXRlLnhtbA.xml')
-        if os.path.exists('res/local-resources/newupdate.xml'):
-            os.remove('res/local-resources/newupdate.xml')
+    try:
+        if os.path.exists(wget.download('https://atarwn.github.io/abl/newupdate.xml', 'temp_bmV3dXBkYXRlLnhtbA.xml')):
+            os.remove('temp_bmV3dXBkYXRlLnhtbA.xml')
+            if os.path.exists('res/local-resources/newupdate.xml'):
+                os.remove('res/local-resources/newupdate.xml')
+            else:
+                pass
+            wget.download('https://atarwn.github.io/abl/newupdate.xml', 'res/local-resources/newupdate.xml')
+            uxml1 = ET.parse('res/local-resources/newupdate.xml')
+            root1 = uxml1.getroot()
+            build1 = root1.find('build').text
         else:
-            pass
-        wget.download('https://atarwn.github.io/abl/newupdate.xml', 'res/local-resources/newupdate.xml')
-        uxml1 = ET.parse('res/local-resources/newupdate.xml')
-        root1 = uxml1.getroot()
-        build1 = root1.find('build').text
-    else:
-        uxml1 = ET.parse('res/local-resources/newupdate.xml')
-        root1 = uxml1.getroot()
-        build1 = root1.find('build').text
+            uxml1 = ET.parse('res/local-resources/newupdate.xml')
+            root1 = uxml1.getroot()
+            build1 = root1.find('build').text
+            showwarning(title='Ой!', message='Указанный файл отсутствует на сервере, игнорируем...')
+    except:
         showwarning(title='Ой!', message='Указанный файл отсутствует на сервере, игнорируем...')
+        pass
+    try:
+        uxml1 = ET.parse('res/local-resources/newupdate.xml')
+        root1 = uxml1.getroot()
+        build1 = root1.find('build').text
+        buildName1 = root1.find('buildname').text
+        relnotes1 = root1.find('relnotes').text
+    except:
+        build1 = 0
+        buildName1 = "Отсутствует интернет"
+        relnotes1 = 'Такое случается, поэтому предлагаем вам поиграть\nв "Оффлайн режиме" (при условии что вы скачали клиент) :3'
+                
+    canvas = Canvas(root, bg = 'white', height = 245, width = 395)
 
     
-    try:
-        au = open("res/config/autoupdate.txt")
-        ioerr = True
-        au.close
-    except IOError:
-        ioerr = False
-
-    if ioerr:
-        au = open("res/config/autoupdate.txt")
-        if au.read() == "True":
-            check_update()
-        else:
-            pass
-    else:
-        create_config_au_file()
-        check_update()
-        
-
-    canvas = Canvas(root, bg = 'white', height = 245, width = 395)
-    buildName1 = root1.find('buildname').text
-    date1 = root1.find('date').text
-    relnotes1 = root1.find('relnotes').text
 
     print('Build:', build1)
     print('Name: ', buildName1)
-    print('Date:', date1)
     print('Release Notes:', relnotes1) #Max symbols: 54; Max lines: 8 
 
     canvas_bg = PhotoImage(file="res/local-resources/shot.png")
     canvas.create_image(1, 1, anchor=NW, image=canvas_bg)
     
-    canvas.create_text(5, 5, text='Обновление '+buildName1, fill="#FFFFFF", anchor=NW, font="Arial 14")
-    canvas.create_text(5, 30, text=date1, fill="#FFFFFF", anchor=NW, font="Arial 10")
-    canvas.create_text(5, 45, text='Изменения:', fill="#FFFFFF", anchor=NW, font="Arial 10")
-    canvas.create_text(5, 45, text=relnotes1, fill="#FFFFFF", anchor=NW, font="Arial 10")
+    canvas.create_text(5, 5, text=buildName1, fill="#FFFFFF", anchor=NW, font="Arial 14")
+    canvas.create_text(5, 30, text=relnotes1, fill="#FFFFFF", anchor=NW, font="Arial 10")
     canvas.create_text(5, 210, text="Следите за новостями на нашем дискорд сервере", fill="#00FFFF", anchor=NW, font="Arial 10")
-    
-    canvas.create_text(5, 229, text="https://clck.ru/36RZvk", fill="#00FFFF", anchor=NW, font="Arial 10")
+    canvas.create_text(5, 229, text="https://discord.gg/5x5N6a4nUX", fill="#00FFFF", anchor=NW, font="Arial 10")
 
 
     global nickname
@@ -385,11 +399,25 @@ def main_code():
         s.close
     except IOError:
         ioerr = False
-
     if ioerr:
         pass
     else:
         create_settings_file()
+
+    try:
+        au = open("res/config/autoupdate.txt")
+        ioerr = True
+        au.close
+    except IOError:
+        ioerr = False
+    if ioerr:
+        au = open("res/config/autoupdate.txt")
+        if au.read() == "True":
+            check_update()
+        else:
+            pass
+    else:
+        create_config_au_file()
             
     canvas.place(x=0, y=0)
     txtlogo.place(x=10, y=250)
@@ -514,7 +542,7 @@ def resources_out_code():
             au_enabled.set(False)
     else:
         create_config_au_file()
-        check_update()
+        
         
     autoupdatech = ttk.Checkbutton(root, text="Включить", variable=au_enabled)
     autoupdatel = Label(root, text="Автообновление:")
@@ -575,9 +603,15 @@ def resources_out_code():
 #   Resources not found   #
 
 
-if not os.path.exists("res/local-resources") or not os.path.exists("res/local-resources/favicon.ico") or not os.path.exists("res/local-resources/shot.png"):
-    #if not os.path.exists("res/local-resources"):
-    #    os.mkdir("res/local-resources")
-    resources_out_code()
-else:
-    main_code()
+#if not os.path.exists("res/local-resources") or not os.path.exists("res/local-resources/favicon.ico") or not os.path.exists("res/local-resources/shot.png"):   
+    #resources_out_code()
+#else:
+#    main_code()
+try:
+    wget.download("https://atarwn.github.io/abl/res.zip")
+    with zipfile.ZipFile('res.zip', 'r') as zip_c:
+        zip_c.extractall('')
+    os.remove("res.zip")
+except:
+    pass
+main_code()
