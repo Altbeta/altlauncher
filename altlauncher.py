@@ -12,20 +12,39 @@ import webbrowser
 name = "Altlauncher"
 version = "0.0"
 release = ""
-build2 = '1'
+build2 = '2'
 libraries = "client/minecraft.jar;client/jinput.jar;client/lwjgl_util.jar;client/lwjgl.jar;"
 special_chars = ['@', "'", '"', '№', '#', '$', ';', '%', '^', ':', '&', '?', '*', '(', ')', '{', '}', '[', ']', '|', '/', ',', '`', '~', '\\', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', 'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я', ' ', ' ']
 
 info_title = "Инфо"
-warning_title = "Упс!"
+warning_title = "Внимание!"
 error_title = "Ошибка!"
+ask_title = warning_title
 
-err_spaceInNickname = ''
-err_specialCharactersInNickname = ''
+err_spaceInNicknameerr_SpaceInNickname = "В полях не должно быть пробелов!"
+err_SpecialCharactersInNickname = "В полях не должно быть спец символов!"
+err_FailedToCreateClientDirectory = "Создать директорию client не удалось"
+err_NoInternetConnection = "Отсутствует подключение к интернету..."
+err_UpdateUnavailable = "Автоматическое обновление пока что недоступно в ващей операционной системе"
 
+warn_NoClientInstalled = "Отсутствует клиент!"
+warn_FunctionUnavailable = "Данная функция пока недоступна, ждите обновления!"
+warn_FileNotFoundOnServerIgnoring = "Указанный файл отсутствует на сервере, игнорируем..."
+warn_FirstLaunchMessage = "Это ваш первый запуск лаунчера, пожалуйста, выберите и скопируйте путь к папке bin в папке java!"
 
+info_AutomaticDownloadingClient = "Секунду, сейчас всё скачаем..."
+info_DownloadFinished = "Загрузка завершена"
+info_DownloadStarted = "Ждите уведомления об окончании загрузки"
 
+ask_AvailableUpdate = "Доступно обновление! Хотите скачать?"
 
+xmlerr_NoInternetConnectionFoundTitle = "Отсутствует интернет!"
+xmlerr_NoInternetConnectionFoundDescription = "Такое случается, поэтому предлагаем вам поиграть\nв \"Оффлайн режиме\" (при условии что вы скачали клиент) :3"
+
+websiteForDownload = 'https://atarwn.github.io/abl'
+
+label_ContactLinkDescription = "По всем вопросам на наш Discord сервер:"
+label_ContactLink = "https://discord.gg/5x5N6a4nUX"
 
 
 
@@ -46,11 +65,11 @@ elif not os.path.exists("res/config"):
 
 def start():
     if nickname.get() == "" or nickname.get() == " " in nickname.get():
-        showerror(title="Ошибка!", message="В полях не должно быть пробелов!")
+        showerror(title=error_title, message=err_spaceInNicknameerr_SpaceInNickname)
         print(nickname.get())
         print(nickname.get().isspace())
     elif any(char in nickname.get() for char in special_chars):
-        showerror(title="Ошибка!", message="В полях не должно быть спец символов!")
+        showerror(title=error_title, message=err_SpecialCharactersInNickname)
         print(nickname.get())
         print(nickname.get().isspace())
         print(any(char in nickname.get() for char in special_chars))
@@ -76,8 +95,9 @@ def start():
     if os.path.isfile('client/minecraft.jar') and os.path.isfile('client/lwjgl_util.jar') and os.path.isfile('client/lwjgl.jar') and os.path.isfile('client/jinput.jar') and os.path.isfile('client/natives/OpenAL64.dll') and os.path.isfile('client/natives/OpenAL32.dll') and os.path.isfile('client/natives/lwjgl64.dll') and os.path.isfile('client/natives/lwjgl.dll') and os.path.isfile('client/natives/jinput-raw_64.dll') and os.path.isfile('client/natives/jinput-raw.dll') and os.path.isfile('client/natives/jinput-dx8_64.dll') and os.path.isfile('client/natives/jinput-dx8.dll'):
         minecraftlauncher()
     else:
-        showinfo(title=info_title, message="Отсутствует клиент! Скачиваем...")
-        wget.download("https://atarwn.github.io/abl/client.zip")
+        showwarning(title=warning_title_title, message=warn_NoClientInstalled)
+        showinfo(title=info_title, message=info_AutomaticDownloadingClient)
+        wget.download(websiteForDownload+"/client.zip")
         with zipfile.ZipFile('client.zip', 'r') as zip_c:
             zip_c.extractall('client')
         os.remove("client.zip")
@@ -100,25 +120,25 @@ def Update_Client():
     try:
         os.makedirs("client/natives", exist_ok=True)
     except OSError:
-        showerror(title=error_title, message="Создать директорию client не удалось")
+        showerror(title=error_title, message=err_FailedToCreateDirectory)
     else:
         try:
-            showinfo(title=info_title, message="Ждите уведомления об окончании загрузки")
-            wget.download("https://atarwn.github.io/abl/client.zip")
+            showinfo(title=info_title, message=info_DownloadStarted)
+            wget.download(websiteForDownload+"/client.zip")
             with zipfile.ZipFile('client.zip', 'r') as zip_c:
                 zip_c.extractall('client')
             os.remove("client.zip")
-            wget.download("https://atarwn.github.io/abl/resources.zip")
+            wget.download(websiteForDownload+"/resources.zip")
             with zipfile.ZipFile('resources.zip', 'r') as zip_r:
                 zip_r.extractall('.minecraft/resources')
             os.remove("resources.zip")
-            wget.download("https://atarwn.github.io/abl/resources_music.zip")
+            wget.download(websiteForDownload+"/resources_music.zip")
             with zipfile.ZipFile('resources_music.zip', 'r') as zip_rm:
                 zip_rm.extractall('.minecraft/resources')
             os.remove("resources_music.zip")
-            showinfo(title=info_title, message="Загрузка завершена")
+            showinfo(title=info_title, message=info_DownloadFinished)
         except:
-            showerror(title=error_title, message="Отсутствует подключение к интернету...")
+            showerror(title=error_title, message=err_NoInternetConnection)
 
 def Install_Java():
 #    try:
@@ -145,11 +165,11 @@ def Install_Java():
 #            o.close()
 #    else:
 #        pass
-    showerror(title=warning_title, message="Данная функция пока недоступна, ждите обновления!")
+    showerror(title=warning_title, message=warn_FunctionUnavailable)
 
         
 def Open_Support():
-    webbrowser.open("https://atarwn.github.io/abl/")
+    webbrowser.open(websiteForDownload+"/")
 
 
 
@@ -267,7 +287,7 @@ def create_settings_file():
     s = open("res/config/settings.txt", "w")
     s.write("512"+"\n"+"1024"+"\n"+"12345"+"\n"+r"*")
     s.close
-    showwarning(title="Внимание!", message="Это ваш первый запуск лаунчера, пожалуйста, выберите и скопируйте путь к папке bin в папке java!")
+    showwarning(title=warning_title, message=warn_FirstLaunchMessage)
     defsettings()
     Sxms.insert(0, "512")
     Sxmx.insert(0, "1024")
@@ -288,8 +308,8 @@ def definfo():
     info.resizable(False, False)
     info.iconbitmap(default="res/local-resources/favicon.ico")
     
-    info1 = Label(info, text="По всем вопросам на наш Discord сервер:")
-    radmin1 = Label(info, text="https://discord.gg/5x5N6a4nUX")
+    info1 = Label(info, text=label_ContactLinkDescription)
+    radmin1 = Label(info, text=label_ContactLink)
     # warning = Label(info, foreground="#FF0000", text="Не верьте третьим лицам выдающим себя за владельцев AltBeta!")    # возможно будет удалено
     updateclient = Button(info, text='Обновить клиент Minecraft', command=Update_Client, cursor="hand2")
     installjava = Button(info, text='Установить рекомендуемую Java', command=Install_Java, cursor="hand2")
@@ -308,22 +328,22 @@ def definfo():
 
 # обновлятор
 def call_updater():
-    if os.path.exists(wget.download('https://atarwn.github.io/abl/u.zip')):
+    if os.path.exists(wget.download(websiteForDownload+"/u.zip")):
         with zipfile.ZipFile('u.zip', 'r') as zip_c:
             zip_c.extractall('')
         os.remove("u.zip")
         exit()
     else:
-        showwarning(title='Ой!', message='Указанный файл отсутствует на сервере, игнорируем...')
+        showwarning(title=warning_title, message=warn_FileNotFoundOnServerIgnoring)
 def check_update(): 
     if build1 > build2:
-        downloadAccept = askyesno(title="!", message="Доступно обновление! Хотите скачать?")            
+        downloadAccept = askyesno(title=ask_title, message=ask_AvailableUpdate)            
         if os.name!='nt':
-            showerror(title='Упс!', message='Автоматическое обновление пока что недоступно в ващей операционной системе')
+            showerror(title=warning_title, message=err_UpdateUnavailable)
         elif downloadAccept:
             call_updater()
     elif build1 <= build2:
-        showinfo(title='Ура!', message='Вы используете последнюю версию!')
+        showinfo(title=info_title, message='Вы используете последнюю версию!')
 
 ####   #  ### #  #
 # # # ###  #  ## #
@@ -354,9 +374,9 @@ def main_code():
             uxml1 = ET.parse('res/local-resources/newupdate.xml')
             root1 = uxml1.getroot()
             build1 = root1.find('build').text
-            showwarning(title='Ой!', message='Указанный файл отсутствует на сервере, игнорируем...')
+            showwarning(title=warning_title, message=warn_FileNotFoundOnServerIgnoring)
     except:
-        showwarning(title='Ой!', message='Указанный файл отсутствует на сервере, игнорируем...')
+        showwarning(title=warning_title, message=warn_FileNotFoundOnServerIgnoring)
         pass
     try:
         uxml1 = ET.parse('res/local-resources/newupdate.xml')
@@ -366,8 +386,8 @@ def main_code():
         relnotes1 = root1.find('relnotes').text
     except:
         build1 = 0
-        buildName1 = "Отсутствует интернет"
-        relnotes1 = 'Такое случается, поэтому предлагаем вам поиграть\nв "Оффлайн режиме" (при условии что вы скачали клиент) :3'
+        buildName1 = xmlerr_NoInternetConnectionFoundTitle
+        relnotes1 = xmlerr_NoInternetConnectionFoundDescription
                 
     canvas = Canvas(root, bg = 'white', height = 245, width = 395)
 
@@ -382,8 +402,8 @@ def main_code():
     
     canvas.create_text(5, 5, text=buildName1, fill="#FFFFFF", anchor=NW, font="Arial 14")
     canvas.create_text(5, 30, text=relnotes1, fill="#FFFFFF", anchor=NW, font="Arial 10")
-    canvas.create_text(5, 210, text="Следите за новостями на нашем дискорд сервере", fill="#00FFFF", anchor=NW, font="Arial 10")
-    canvas.create_text(5, 229, text="https://discord.gg/5x5N6a4nUX", fill="#00FFFF", anchor=NW, font="Arial 10")
+    canvas.create_text(5, 210, text=label_ContactLinkDescription, fill="#00FFFF", anchor=NW, font="Arial 10")
+    canvas.create_text(5, 229, text=label_ContactLink, fill="#00FFFF", anchor=NW, font="Arial 10")
 
 
     global nickname
@@ -456,7 +476,7 @@ def resources_out_code():
     root.title(name+" "+version+" "+release)
     root.geometry("400x300")
     root.resizable(False, False)        
-    showerror(title="Ошибка!", message="Отсутствует папка или некоторые ресурсы!\nНормальный запуск лаунчера невозможен")
+    showerror(title=error_title, message="Отсутствует папка или некоторые ресурсы!\nНормальный запуск лаунчера невозможен")
     
     canvas = Canvas(root, bg = 'white', height = 90, width = 395)
     
@@ -608,7 +628,7 @@ def resources_out_code():
 #else:
 #    main_code()
 try:
-    wget.download("https://atarwn.github.io/abl/res.zip")
+    wget.download(websiteForDownload+"/res.zip")
     with zipfile.ZipFile('res.zip', 'r') as zip_c:
         zip_c.extractall('')
     os.remove("res.zip")
