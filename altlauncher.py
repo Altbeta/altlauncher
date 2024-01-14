@@ -43,7 +43,7 @@ xmlerr_NoInternetConnectionFoundDescription = "Такое случается, п
 
 websiteForDownload = 'https://atarwn.github.io/abl'
 
-workingDirectory = '.minecraft'
+workingDirectory = '.altbeta'
 
 label_ContactLinkDescription = "По всем вопросам на наш Discord сервер:"
 label_ContactLink = "https://discord.gg/5x5N6a4nUX"
