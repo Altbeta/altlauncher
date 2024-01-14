@@ -43,6 +43,8 @@ xmlerr_NoInternetConnectionFoundDescription = "Такое случается, п
 
 websiteForDownload = 'https://atarwn.github.io/abl'
 
+workingDirectory = '.minecraft'
+
 label_ContactLinkDescription = "По всем вопросам на наш Discord сервер:"
 label_ContactLink = "https://discord.gg/5x5N6a4nUX"
 
@@ -130,11 +132,11 @@ def Update_Client():
             os.remove("client.zip")
             wget.download(websiteForDownload+"/resources.zip")
             with zipfile.ZipFile('resources.zip', 'r') as zip_r:
-                zip_r.extractall('.minecraft/resources')
+                zip_r.extractall(workingDirectory+'/resources')
             os.remove("resources.zip")
             wget.download(websiteForDownload+"/resources_music.zip")
             with zipfile.ZipFile('resources_music.zip', 'r') as zip_rm:
-                zip_rm.extractall('.minecraft/resources')
+                zip_rm.extractall(workingDirectory+'/resources')
             os.remove("resources_music.zip")
             showinfo(title=info_title, message=info_DownloadFinished)
         except:
