@@ -1,1 +1,1 @@
-![Altlauncher](https://qwa.lol/al/2024-01-11-11-32-49.png)
+![Altlauncher](https://i.imgur.com/Zq9Lxw2.png)
