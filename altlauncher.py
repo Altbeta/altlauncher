@@ -26,6 +26,7 @@ err_SpecialCharactersInNickname = "В полях не должно быть сп
 err_FailedToCreateClientDirectory = "Создать директорию client не удалось"
 err_NoInternetConnection = "Отсутствует подключение к интернету..."
 err_UpdateUnavailable = "Автоматическое обновление пока что недоступно в ващей операционной системе"
+err_clientNotFound = "Клиент не установлен! Перейдите в \"Инфо\" и скачайте клиент"
 
 warn_NoClientInstalled = "Отсутствует клиент!"
 warn_FunctionUnavailable = "Данная функция пока недоступна, ждите обновления!"
@@ -66,6 +67,11 @@ elif not os.path.exists("res/config"):
     
 
 def start():
+    if os.path.isdir("client"):
+        pass
+    else:
+        showerror(title=error_title, message=err_clientNotFound)
+        return
     if nickname.get() == "" or nickname.get() == " " in nickname.get():
         showerror(title=error_title, message=err_spaceInNicknameerr_SpaceInNickname)
         print(nickname.get())
@@ -295,7 +301,10 @@ def create_settings_file():
     Sxmx.insert(0, "1024")
     Ssession.insert(0, "12345")
     Sjrebin.insert(0, "ВСТАВИТЬ СЮДА")
-    webbrowser.open("C:\Program Files\Java")
+    if os.path.isdir("C:\Program Files\Java"):
+	    webbrowser.open("C:\Program Files\Java")
+	else:
+	    webbroser.open("https://https://www.filehorse.com/download-java-runtime-64/21228/")
 def create_config_au_file():
     s = open("res/config/autoupdate.txt", "w")
     s.write("False")
